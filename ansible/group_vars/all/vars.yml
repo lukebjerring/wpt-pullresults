@@ -204,7 +204,7 @@ commit: master
 # Git repo address.
 # For private repositories: git@github.com:{{remote}}/{{project_name}}.git
 # For public: https://github.com/{{remote}}/{{project_name}}
-git_repo: https://github.com/{{remote}}/wpt-pullresults
+git_repo: https://github.com/{{remote}}/{{project_name}}
 
 # Uncomment this if if you are checking out a private repo
 # ansible_ssh_common_args: -o ForwardAgent=yes
@@ -224,9 +224,9 @@ local: false
 #nonsensitive data
 db_name: wptdash
 db_user: wptdash
-github_org: w3c
+github_org: lukebjerring
 github_repo: web-platform-tests
-github_commenter: w3c-bots
+github_commenter: lukebjerring
 
 #sensitive data
 db_password: "{{ vault_db_password }}"
