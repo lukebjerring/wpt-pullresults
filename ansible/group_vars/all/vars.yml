@@ -197,7 +197,7 @@ commit: master
 # Git repo address.
 # For private repositories: git@github.com:{{remote}}/{{project_name}}.git
 # For public: https://github.com/{{remote}}/{{project_name}}
-git_repo: https://github.com/{{remote}}/wpt-pullresults
+git_repo: https://github.com/{{remote}}/{{project_name}}
 
 # Uncomment this if if you are checking out a private repo
 # ansible_ssh_common_args: -o ForwardAgent=yes
