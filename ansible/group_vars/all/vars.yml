@@ -217,9 +217,9 @@ local: false
 #nonsensitive data
 db_name: wptdash
 db_user: wptdash
-github_org: w3c
+github_org: lukebjerring
 github_repo: web-platform-tests
-github_commenter: w3c-bots
+github_commenter: lukebjerring
 
 #sensitive data
 db_password: "{{ vault_db_password }}"
