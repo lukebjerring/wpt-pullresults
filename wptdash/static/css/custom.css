@@ -14,3 +14,22 @@ summary::before {
 details[open] > summary::before {
   content: '\25BC';
 }
+
+.repo {
+  margin: 0 16px;
+  vertical-align: middle;
+}
+
+.repo svg {
+  height: 30px;
+  width: 30px;
+}
+
+.repo-gh {
+  display: inline-block;
+  fill: rgba(0,0,0,.2);
+}
+
+.repo-travis {
+  display: inline;
+}

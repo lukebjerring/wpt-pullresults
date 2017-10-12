@@ -23,7 +23,13 @@
       <h1>
         Pull Request {{pull_number}}{% if pull %}:
           <small>{{pull.title}}</small>
-        {% endif %}</h1>
+        {% endif %}
+        <a class='repo repo-gh'
+           title='View PR on GitHub'
+           href="https://github.com/{{org_name}}/{{repo_name}}/pull/{{pull_number}}">
+          <svg><use xlink:href="{{ url_for('static', filename='svg/GitHub-Logo.svg') }}#GitHub-Logo" /></svg>
+        </a>
+      </h1>
     </div>
 
     {% if not pull %}
@@ -50,6 +56,18 @@
         </code>.
       </p>
       <dl>
+        <div class="row">
+          <div class="col-xs-2">
+            <dt>Branch</dt>
+            <dd>
+              {{ pull.base_branch }}
+              <a class='repo repo-travis'
+                 href="https://travis-ci.org/{{org_name}}/{{repo_name}}/branches">
+                <img src="https://travis-ci.org/{{org_name}}/{{repo_name}}.svg?branch={{pull.base_branch}}" />
+              </a>
+            </dd>
+          </div>
+        </div>
         <div class="row">
           <div class="col-xs-4">
             <dt>Status</dt>
