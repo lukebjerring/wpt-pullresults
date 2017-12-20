@@ -80,7 +80,7 @@ populate it with build status data.
 
 1. Change `notifications.webhooks` in `.travis.yml` (probably at the bottom) in
    https://github.com/w3c/web-platform-tests to point to
-   `http://pulls.web-platform-tests.org/api/build`.
+   `http://pulls-staging.web-platform-tests.org/api/build`.
 
 ## Security Model
 

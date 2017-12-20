@@ -2,6 +2,7 @@
 import enum
 
 from wptdash.database import db
+from operator import attrgetter
 
 
 class BuildStatus(enum.Enum):
@@ -49,6 +50,7 @@ class JobStatus(enum.Enum):
     FAILED = 5
     ERRORED = 6
     FINISHED = 7
+    CANCELLED = 8
 
     @classmethod
     def from_string(cls, status):
@@ -60,6 +62,10 @@ class JobStatus(enum.Enum):
 
         Returns enum value corresponding to status string
         """
+
+        # Consolidate Travis + our spelling of cancel[l]ed.
+        status = "CANCELLED" if status.upper() == "CANCELED" else status
+
         return getattr(cls, status.upper())
 
 
@@ -309,6 +315,10 @@ class PullRequest(db.Model):
                              uselist=False, cascade='all, delete-orphan')
     watchers = db.relationship('GitHubUser', secondary=USER_PR,
                                back_populates='prs_watching')
+
+    @property
+    def latest_build(self):
+        return sorted(self.builds, key=attrgetter('started_at'), reverse=True)[0]
 
 
 class Repository(db.Model):
