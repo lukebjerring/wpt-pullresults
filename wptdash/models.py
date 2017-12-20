@@ -21,6 +21,7 @@ class BuildStatus(enum.Enum):
     STILL_FAILING = 6
     CANCELLED = 7
     ERRORED = 8
+    RECEIVED = 9
 
     @classmethod
     def from_string(cls, status):
@@ -32,6 +33,10 @@ class BuildStatus(enum.Enum):
 
         Returns enum value corresponding to status string
         """
+
+        # Consolidate Travis + our spelling of cancel[l]ed.
+        status = "CANCELLED" if status.upper() == "CANCELED" else status
+
         return getattr(cls, status.replace(' ', '_').upper())
 
 
