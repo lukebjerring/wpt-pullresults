@@ -8,10 +8,10 @@
     a single GitHub comment and provides an interface for displaying
     more detailed forms of that information.
 """
-from collections import defaultdict
 import configparser
 from datetime import datetime, timedelta
 from flask import Blueprint, g, render_template, request
+from flask_cors import cross_origin
 from jsonschema import validate
 import hashlib
 import hmac
@@ -76,6 +76,18 @@ def job_detail(job_number):
     job = models.get(db.session, models.Job, number=job_number)
     return render_template('job.html', job=job, job_number=job_number,
                            org_name=ORG, repo_name=REPO)
+
+
+@bp.route('/job/<string:job_number>/summary')
+@cross_origin()
+def job_summary(job_number):
+    db = g.db
+    models = g.models
+    job = models.get(db.session, models.Job, number=job_number)
+    summary = job.results_summary
+    if summary is None:
+        return '{}', 404
+    return json.dumps(summary)
 
 
 @bp.route('/performance')

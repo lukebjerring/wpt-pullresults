@@ -1,6 +1,7 @@
 """ SQLAlchemy Model definitions. """
 import enum
 
+from typing import Optional
 from wptdash.database import db
 
 
@@ -217,6 +218,35 @@ class Job(db.Model):
     product = db.relationship('Product', back_populates='jobs')
     tests = db.relationship('JobResult', back_populates='job')
 
+    @property
+    def results_summary(self):  # type: (Job) -> Optional[dict]
+        """Returns a dict of all the stable executed tests, and their summary
+        pass counts, or None if no stable tests ran."""
+        if not self.tests or len(self.tests) < 1:
+            return None
+
+        summary = {}
+        results = filter(lambda x: not x.test.parent, self.tests)
+        for result in results:  # type: JobResult
+            if not result.consistent:
+                continue
+
+            test_path = result.test_id
+            count = 1
+            passes = 1 if result.is_pass else 0
+            subresults = lambda x: x.test.parent_id == result.test_id
+            for subresult in filter(subresults, self.tests):  # type: JobResult
+                if not subresult.consistent:
+                    continue
+
+                passes += 1 if subresult.is_pass else 0
+                count += 1
+            summary[test_path] = [passes, count]
+
+        if len(summary) < 1:
+            return None
+        return summary
+
 
 class JobResult(db.Model):
 
@@ -241,6 +271,13 @@ class JobResult(db.Model):
     statuses = db.relationship('StabilityStatus',
                                primaryjoin="and_(foreign(JobResult.job_id)==remote(StabilityStatus.job_id), foreign(JobResult.test_id)==remote(StabilityStatus.test_id))",
                                uselist=True)
+
+    @property
+    def is_pass(self):  # type: (JobResult) -> bool
+        if not self.statuses or len(self.statuses) < 1:
+            return False
+        passing_statuses = [TestStatus.OK, TestStatus.PASS]
+        return self.statuses[0].status in passing_statuses
 
 
 class Product(db.Model):
